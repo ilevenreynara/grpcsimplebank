@@ -6,7 +6,7 @@ import (
 )
 
 type Store interface {
-	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)
+	TrasferTx(ctx context.Context, arg TrasferTxParams) (TrasferTxResult, error)
 	Querier
 }
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	db "github.com/ilevenreynara/grpcsimplebank/db"
+	db "github.com/ilevenreynara/grpcsimplebank/db/sqlc"
 	"github.com/ilevenreynara/grpcsimplebank/pkg/pb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -35,7 +35,7 @@ func (s *TransferServer) Transfer(ctx context.Context,
 		FromAccountId: transfer.Transfer.FromAccountID,
 		ToAccountId:   transfer.Transfer.ToAccountID,
 		Amount:        transfer.Transfer.Amount,
-		CreatedAt:     transfer.Transfer.CreatedAt.Time.Format(time.RFC3339),
+		CreatedAt:     transfer.Transfer.CreatedAt.Format(time.RFC3339),
 	}
 	return resp, nil
 }

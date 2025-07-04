@@ -9,7 +9,7 @@ package pb
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -28,7 +28,7 @@ type Transfer struct {
 	FromAccountId int64                  `protobuf:"varint,2,opt,name=from_account_id,json=fromAccountId,proto3" json:"from_account_id,omitempty"`
 	ToAccountId   int64                  `protobuf:"varint,3,opt,name=to_account_id,json=toAccountId,proto3" json:"to_account_id,omitempty"`
 	Amount        int64                  `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	CreatedAt     string                 `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -91,11 +91,11 @@ func (x *Transfer) GetAmount() int64 {
 	return 0
 }
 
-func (x *Transfer) GetCreatedAt() *timestamppb.Timestamp {
+func (x *Transfer) GetCreatedAt() string {
 	if x != nil {
 		return x.CreatedAt
 	}
-	return nil
+	return ""
 }
 
 type TransferRequest struct {
@@ -160,8 +160,11 @@ func (x *TransferRequest) GetAmount() int64 {
 
 type TransferResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Transfer      *Transfer              `protobuf:"bytes,1,opt,name=transfer,proto3" json:"transfer,omitempty"`
-	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	FromAccountId int64                  `protobuf:"varint,2,opt,name=from_account_id,json=fromAccountId,proto3" json:"from_account_id,omitempty"`
+	ToAccountId   int64                  `protobuf:"varint,3,opt,name=to_account_id,json=toAccountId,proto3" json:"to_account_id,omitempty"`
+	Amount        int64                  `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	CreatedAt     string                 `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -196,16 +199,37 @@ func (*TransferResponse) Descriptor() ([]byte, []int) {
 	return file_proto_transfer_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *TransferResponse) GetTransfer() *Transfer {
+func (x *TransferResponse) GetId() int64 {
 	if x != nil {
-		return x.Transfer
+		return x.Id
 	}
-	return nil
+	return 0
 }
 
-func (x *TransferResponse) GetMessage() string {
+func (x *TransferResponse) GetFromAccountId() int64 {
 	if x != nil {
-		return x.Message
+		return x.FromAccountId
+	}
+	return 0
+}
+
+func (x *TransferResponse) GetToAccountId() int64 {
+	if x != nil {
+		return x.ToAccountId
+	}
+	return 0
+}
+
+func (x *TransferResponse) GetAmount() int64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+func (x *TransferResponse) GetCreatedAt() string {
+	if x != nil {
+		return x.CreatedAt
 	}
 	return ""
 }
@@ -302,21 +326,25 @@ var File_proto_transfer_proto protoreflect.FileDescriptor
 
 const file_proto_transfer_proto_rawDesc = "" +
 	"\n" +
-	"\x14proto/transfer.proto\x12\btransfer\x1a\x1fgoogle/protobuf/timestamp.proto\"\xb9\x01\n" +
+	"\x14proto/transfer.proto\x12\btransfer\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9d\x01\n" +
 	"\bTransfer\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12&\n" +
 	"\x0ffrom_account_id\x18\x02 \x01(\x03R\rfromAccountId\x12\"\n" +
 	"\rto_account_id\x18\x03 \x01(\x03R\vtoAccountId\x12\x16\n" +
-	"\x06amount\x18\x04 \x01(\x03R\x06amount\x129\n" +
+	"\x06amount\x18\x04 \x01(\x03R\x06amount\x12\x1d\n" +
 	"\n" +
-	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"u\n" +
+	"created_at\x18\x05 \x01(\tR\tcreatedAt\"u\n" +
 	"\x0fTransferRequest\x12&\n" +
 	"\x0ffrom_account_id\x18\x01 \x01(\x03R\rfromAccountId\x12\"\n" +
 	"\rto_account_id\x18\x02 \x01(\x03R\vtoAccountId\x12\x16\n" +
-	"\x06amount\x18\x03 \x01(\x03R\x06amount\"\\\n" +
-	"\x10TransferResponse\x12.\n" +
-	"\btransfer\x18\x01 \x01(\v2\x12.transfer.TransferR\btransfer\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"(\n" +
+	"\x06amount\x18\x03 \x01(\x03R\x06amount\"\xa5\x01\n" +
+	"\x10TransferResponse\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12&\n" +
+	"\x0ffrom_account_id\x18\x02 \x01(\x03R\rfromAccountId\x12\"\n" +
+	"\rto_account_id\x18\x03 \x01(\x03R\vtoAccountId\x12\x16\n" +
+	"\x06amount\x18\x04 \x01(\x03R\x06amount\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x05 \x01(\tR\tcreatedAt\"(\n" +
 	"\x16GetTransferByIDRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"@\n" +
 	"\x1fListTransfersByAccountIDRequest\x12\x1d\n" +
@@ -346,22 +374,19 @@ var file_proto_transfer_proto_goTypes = []any{
 	(*TransferResponse)(nil),                // 2: transfer.TransferResponse
 	(*GetTransferByIDRequest)(nil),          // 3: transfer.GetTransferByIDRequest
 	(*ListTransfersByAccountIDRequest)(nil), // 4: transfer.ListTransfersByAccountIDRequest
-	(*timestamppb.Timestamp)(nil),           // 5: google.protobuf.Timestamp
 }
 var file_proto_transfer_proto_depIdxs = []int32{
-	5, // 0: transfer.Transfer.created_at:type_name -> google.protobuf.Timestamp
-	0, // 1: transfer.TransferResponse.transfer:type_name -> transfer.Transfer
-	1, // 2: transfer.TransferService.CreateTransfer:input_type -> transfer.TransferRequest
-	3, // 3: transfer.TransferService.GetTransferByID:input_type -> transfer.GetTransferByIDRequest
-	4, // 4: transfer.TransferService.ListTransfersByAccountID:input_type -> transfer.ListTransfersByAccountIDRequest
-	2, // 5: transfer.TransferService.CreateTransfer:output_type -> transfer.TransferResponse
-	0, // 6: transfer.TransferService.GetTransferByID:output_type -> transfer.Transfer
-	0, // 7: transfer.TransferService.ListTransfersByAccountID:output_type -> transfer.Transfer
-	5, // [5:8] is the sub-list for method output_type
-	2, // [2:5] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	1, // 0: transfer.TransferService.CreateTransfer:input_type -> transfer.TransferRequest
+	3, // 1: transfer.TransferService.GetTransferByID:input_type -> transfer.GetTransferByIDRequest
+	4, // 2: transfer.TransferService.ListTransfersByAccountID:input_type -> transfer.ListTransfersByAccountIDRequest
+	2, // 3: transfer.TransferService.CreateTransfer:output_type -> transfer.TransferResponse
+	0, // 4: transfer.TransferService.GetTransferByID:output_type -> transfer.Transfer
+	0, // 5: transfer.TransferService.ListTransfersByAccountID:output_type -> transfer.Transfer
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
+	0, // [0:0] is the sub-list for extension type_name
+	0, // [0:0] is the sub-list for extension extendee
+	0, // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_proto_transfer_proto_init() }
